@@ -1,0 +1,57 @@
+{
+  "slug": "06-intoxicated-passenger",
+  "title": "Пассажир с признаками опьянения",
+  "description": "Пассажир громко разговаривает, пристаёт к соседям, есть признаки опьянения.",
+  "category": "conflict",
+  "service_class": "any",
+  "passenger_type": "intoxicated",
+  "stage": "in_flight",
+  "regulatory_ref": "СТО РЖД 03.011-2026, разд. 10.4; ПТБ",
+  "difficulty": "hard",
+  "xp_reward": 200,
+  "start_node_key": "start",
+  "nodes": [
+    {
+      "key": "start",
+      "type": "choice",
+      "text": "Мужчина, 35 лет, громко обращается к соседям, размахивает руками, есть запах алкоголя. Реакция соседей — напряжённая.",
+      "timer_seconds": 15,
+      "choices": [
+        {"label": "«Прошу Вас соблюдать спокойствие и не создавать неудобств другим пассажирам»", "next_node_key": "escalate", "loyalty_delta": 5, "safety_delta": 5, "score_delta": 10, "competence": "role_model_communication", "role_step": "state_rule", "order_index": 0},
+        {"label": "Скрытно вызвать начальника поезда и ПТБ, не называя причину по рации", "next_node_key": "escalate", "loyalty_delta": 10, "safety_delta": 20, "score_delta": 30, "competence": "safety_escalation", "requires_escalation": "nachalnik_poezda", "order_index": 1},
+        {"label": "Вступить в спор, указать, что он пьян", "next_node_key": "end_fail", "loyalty_delta": -20, "safety_delta": -25, "score_delta": -30, "competence": "conflict_deescalation", "role_step": null, "order_index": 2}
+      ]
+    },
+    {
+      "key": "escalate",
+      "type": "choice",
+      "text": "Начальник поезда и сотрудник ПТБ прибыли в вагон. Пассажир продолжает громко возмущаться.",
+      "timer_seconds": 15,
+      "choices": [
+        {"label": "Оставаться рядом с пассажирами, успокаивать, предоставить информацию начальнику поезда", "next_node_key": "end_ok", "loyalty_delta": 10, "safety_delta": 10, "score_delta": 20, "competence": "conflict_deescalation", "role_step": "reassure", "order_index": 0},
+        {"label": "Уйти в служебную зону — пусть разбираются без меня", "next_node_key": "end_mid", "loyalty_delta": -10, "safety_delta": -5, "score_delta": -5, "competence": "safety_escalation", "role_step": null, "order_index": 1}
+      ]
+    },
+    {
+      "key": "end_ok",
+      "type": "end",
+      "text": "Пассажир сопровождается сотрудниками ПТБ на выход. Обстановка стабилизирована.",
+      "is_terminal": true,
+      "choices": []
+    },
+    {
+      "key": "end_mid",
+      "type": "end",
+      "text": "Разобрались без вас. Внутренний отзыв: недостаточное участие в разрешении ситуации.",
+      "is_terminal": true,
+      "choices": []
+    },
+    {
+      "key": "end_fail",
+      "type": "end",
+      "text": "Конфликт перешёл в физическую стадию. Серьёзный инцидент, разбор с руководством.",
+      "is_terminal": true,
+      "choices": []
+    }
+  ]
+}

@@ -117,3 +117,83 @@ class AnalyticsEvent(Base):
     event_type = Column(String, nullable=False)
     payload = Column(JSON, default=dict)
     created_at = Column(DateTime, default=datetime.utcnow)
+"""VSM game domain models.
+
+LLM context: Grounded in STO RZD 03.011/03.013/03.014 and "Situations on board".
+"""
+import uuid
+import enum
+from datetime import datetime
+from sqlalchemy import (Column, String, Boolean, DateTime, Integer,
+                        ForeignKey, JSON, Text, Enum)
+from sqlalchemy.dialects.postgresql import UUID
+from database.database import Base
+
+
+class ScenarioStatus(str, enum.Enum):
+    draft = "draft"
+    active = "active"
+    archived = "archived"
+
+
+class RunStatus(str, enum.Enum):
+    in_progress = "in_progress"
+    finished = "finished"
+    abandoned = "abandoned"
+    failed = "failed"
+
+
+class ServiceClass(str, enum.Enum):
+    standard = "standard"
+    comfort = "comfort"
+    business = "business"
+    first = "first"
+    any = "any"
+
+
+class PassengerType(str, enum.Enum):
+    regular = "regular"
+    with_child = "with_child"
+    with_animal = "with_animal"
+    limited_mobility_hearing = "limited_mobility_hearing"
+    limited_mobility_vision = "limited_mobility_vision"
+    limited_mobility_wheelchair = "limited_mobility_wheelchair"
+    limited_mobility_motor = "limited_mobility_motor"
+    unaccompanied_child = "unaccompanied_child"
+    intoxicated = "intoxicated"
+    aggressive = "aggressive"
+    allergic = "allergic"
+    late = "late"
+    lost_item = "lost_item"
+    no_document = "no_document"
+
+
+class Stage(str, enum.Enum):
+    boarding = "boarding"
+    in_flight = "in_flight"
+    arrival = "arrival"
+
+
+class RoleStep(str, enum.Enum):
+    admit = "admit"                  # ПРИЗНАТЬ
+    state_rule = "state_rule"        # ОБОЗНАЧИТЬ ПРАВИЛО
+    offer_solution = "offer_solution"  # ПРЕДЛОЖИТЬ РЕШЕНИЕ
+    reassure = "reassure"            # ЗАВЕРИТЬ
+
+
+class EscalationTarget(str, enum.Enum):
+    nachalnik_poezda = "nachalnik_poezda"
+    ptb = "ptb"                      # пост транспортной безопасности
+    lovd = "lovd"                    # линейный отдел внутренних дел
+    bortinzhener = "bortinzhener"    # бортинженер
+    medic = "medic"
+
+
+# SLA per STO 03.011 p.10.5 (sec)
+SLA_SECONDS = {
+    ServiceClass.standard: 20 * 60,
+    ServiceClass.comfort: 15 * 60,
+    ServiceClass.business: 10 * 60,
+    ServiceClass.first: 5 * 60,
+    ServiceClass.any: 20 * 60,
+}

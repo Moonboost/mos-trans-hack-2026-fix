@@ -1,0 +1,70 @@
+{
+  "slug": "conflict-loud-music",
+  "title": "Громкая музыка в вагоне",
+  "description": "Пассажир в наушниках на весь вагон. Сосед требует вмешаться.",
+  "category": "conflict",
+  "difficulty": "medium",
+  "xp_reward": 150,
+  "start_node_key": "start",
+  "nodes": [
+    {
+      "key": "start",
+      "type": "choice",
+      "text": "Вагон 7, 14:32. Молодой человек слушает музыку без наушников. Женщина напротив уже дважды сделала замечание. Обстановка накаляется.",
+      "timer_seconds": 20,
+      "choices": [
+        {"label": "Сразу вызвать охрану по рации", "next_node_key": "guard", "loyalty_delta": -10, "safety_delta": 5, "score_delta": 5, "competence": "safety_protocol", "order_index": 0},
+        {"label": "Спокойно подойти и вежливо попросить надеть наушники", "next_node_key": "soft", "loyalty_delta": 10, "safety_delta": 5, "score_delta": 20, "competence": "empathy", "order_index": 1},
+        {"label": "Сделать вид, что не заметили", "next_node_key": "ignore", "loyalty_delta": -15, "safety_delta": -5, "score_delta": -10, "competence": "service", "order_index": 2}
+      ]
+    },
+    {
+      "key": "soft",
+      "type": "choice",
+      "text": "Молодой человек снизил громкость, но женщина продолжает возмущаться: «Вы обязаны его высадить!»",
+      "timer_seconds": 15,
+      "choices": [
+        {"label": "Предложить женщине пересесть в другой вагон", "next_node_key": "end_ok", "loyalty_delta": 5, "safety_delta": 5, "score_delta": 15, "competence": "conflict_resolution", "order_index": 0},
+        {"label": "Объяснить, что высадка вне компетенции проводника", "next_node_key": "end_mid", "loyalty_delta": -5, "safety_delta": 0, "score_delta": 5, "competence": "regulation", "order_index": 1}
+      ]
+    },
+    {
+      "key": "guard",
+      "type": "choice",
+      "text": "Охрана подошла. Молодой человек в ответ начал снимать на телефон и угрожать жалобой на «превышение полномочий».",
+      "timer_seconds": 10,
+      "choices": [
+        {"label": "Попросить охрану остаться в стороне, а самому успокоить пассажира", "next_node_key": "end_mid", "loyalty_delta": 5, "safety_delta": 5, "score_delta": 10, "competence": "empathy", "order_index": 0},
+        {"label": "Продолжить разбирательство с охраной", "next_node_key": "end_bad", "loyalty_delta": -10, "safety_delta": 0, "score_delta": -5, "competence": "regulation", "order_index": 1}
+      ]
+    },
+    {
+      "key": "ignore",
+      "type": "end",
+      "text": "Через 4 минуты женщина записала видео и выложила в соцсети. К вечеру ролик набрал 12 тысяч просмотров.",
+      "is_terminal": true,
+      "choices": []
+    },
+    {
+      "key": "end_ok",
+      "type": "end",
+      "text": "Женщина пересела. Молодой человек извинился. Инцидент исчерпан без жалоб.",
+      "is_terminal": true,
+      "choices": []
+    },
+    {
+      "key": "end_mid",
+      "type": "end",
+      "text": "Разошлись, но осадок остался. Женщина написала жалобу в приложение — рассмотрят в течение 3 дней.",
+      "is_terminal": true,
+      "choices": []
+    },
+    {
+      "key": "end_bad",
+      "type": "end",
+      "text": "Видео с охраной у вагона ушло в сеть. Репутационный инцидент, разбор с руководителем бригады.",
+      "is_terminal": true,
+      "choices": []
+    }
+  ]
+}

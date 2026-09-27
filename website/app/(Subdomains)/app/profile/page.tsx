@@ -1,12 +1,15 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/entities/user/model/user-context";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { $fetch } from "@/utils/fetch";
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { User, Mail, Save, X, Pencil } from "lucide-react";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -15,6 +18,7 @@ export default function ProfilePage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (user) {
@@ -26,7 +30,21 @@ export default function ProfilePage() {
   if (!user) return null;
 
   async function handleSave() {
+    setErrors({});
     setLoading(true);
+
+    // Простая клиентская валидация
+    if (!name.trim()) {
+      setErrors({ name: "Имя обязательно для заполнения" });
+      setLoading(false);
+      return;
+    }
+    if (!email.trim() || !email.includes("@")) {
+      setErrors({ email: "Введите корректный email" });
+      setLoading(false);
+      return;
+    }
+
     const res = await $fetch("/api/v1/me", {
       method: "PATCH",
       body: JSON.stringify({ name, email }),
@@ -40,58 +58,129 @@ export default function ProfilePage() {
     }
 
     if (res.response && res.response.status >= 500) {
-      toast.error("Server error. Please try again later.");
+      toast.error("Ошибка сервера. Попробуйте позже.");
       setLoading(false);
       return;
     }
 
     if (res.response?.ok) {
-      toast.success("Profile updated");
+      toast.success("Профиль успешно обновлен");
       setEditing(false);
     } else {
-      toast.error(res.json?.message || "Failed to update profile");
+      toast.error(res.json?.message || "Не удалось обновить профиль");
     }
     setLoading(false);
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-display-2">Profile</h1>
+    <div className="space-y-8 py-8">
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
+            <User className="h-6 w-6" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+              Профиль
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Управление личной информацией и настройками аккаунта
+            </p>
+          </div>
+        </div>
         {!editing && (
-          <Button variant="outlined" onClick={() => setEditing(true)}>
-            Edit
+          <Button variant="outlined" size="default" onClick={() => setEditing(true)} className="gap-2">
+            <Pencil className="h-4 w-4" />
+            Редактировать
           </Button>
         )}
       </div>
 
-      <Card className="p-6 space-y-4">
+      {/* Profile Card */}
+      <Card className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-sm">
         {!editing ? (
-          <div className="space-y-2">
-            <p className="text-sm text-muted-foreground">Name</p>
-            <p className="text-lg">{user.name}</p>
-            <p className="text-sm text-muted-foreground">Email</p>
-            <p className="text-lg">{user.email}</p>
-          </div>
+          <CardContent className="p-0 space-y-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                  <User className="h-4 w-4" />
+                  Имя
+                </div>
+                <p className="text-lg font-medium text-foreground">
+                  {user.name || "Не указано"}
+                </p>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                  <Mail className="h-4 w-4" />
+                  Email
+                </div>
+                <p className="text-lg font-medium text-foreground break-all">
+                  {user.email}
+                </p>
+              </div>
+            </div>
+          </CardContent>
         ) : (
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm text-muted-foreground">Name</label>
-              <Input value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
-            <div>
-              <label className="text-sm text-muted-foreground">Email</label>
-              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
-            <div className="flex gap-2">
-              <Button onClick={handleSave} disabled={loading}>
-                {loading ? "Saving..." : "Save"}
+          <form onSubmit={(e) => { e.preventDefault(); handleSave(); }} className="space-y-6">
+            <Field>
+              <FieldLabel>Имя</FieldLabel>
+              <Input
+                placeholder="Введите ваше имя"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                aria-invalid={!!errors.name}
+                className="h-11"
+              />
+              <FieldError errors={errors.name ? [{ message: errors.name }] : []} />
+            </Field>
+
+            <Field>
+              <FieldLabel>Email</FieldLabel>
+              <Input
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                aria-invalid={!!errors.email}
+                className="h-11"
+              />
+              <FieldError errors={errors.email ? [{ message: errors.email }] : []} />
+            </Field>
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
+              <Button 
+                type="submit" 
+                disabled={loading} 
+                className="h-11 flex-1 sm:flex-none gap-2 rounded-xl"
+              >
+                {loading ? (
+                  <>Сохранение...</>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4" />
+                    Сохранить изменения
+                  </>
+                )}
               </Button>
-              <Button variant="text" onClick={() => setEditing(false)}>
-                Cancel
+              <Button 
+                type="button" 
+                variant="text" 
+                onClick={() => {
+                  setEditing(false);
+                  setName(user.name || "");
+                  setEmail(user.email || "");
+                  setErrors({});
+                }}
+                className="h-11 flex-1 sm:flex-none gap-2 rounded-xl"
+                disabled={loading}
+              >
+                <X className="h-4 w-4" />
+                Отмена
               </Button>
             </div>
-          </div>
+          </form>
         )}
       </Card>
     </div>

@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -9,10 +10,11 @@ import { safeCookieStorage } from "@/utils/safe-cookie-storage";
 import { useUser } from "@/entities/user/model/user-context";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { z } from "zod";
+import { ShieldCheck } from "lucide-react";
 
 const loginSchema = z.object({
-  email: z.email("Invalid email"),
-  password: z.string().min(1, "Password is required"),
+  email: z.string().email("Некорректный email"),
+  password: z.string().min(1, "Пароль обязателен"),
 });
 
 export default function LoginPage() {
@@ -49,7 +51,7 @@ export default function LoginPage() {
 
     // Handle 5xx (server errors)
     if (res.response && res.response.status >= 500) {
-      toast.error("Server error. Please try again later.");
+      toast.error("Ошибка сервера. Попробуйте позже.");
       setLoading(false);
       return;
     }
@@ -69,7 +71,7 @@ export default function LoginPage() {
         setErrors(fieldErrors);
       } else {
         // Non‑422 errors: show toast or message
-        toast.error(res.json?.message || "Login failed");
+        toast.error(res.json?.message || "Ошибка входа");
       }
       setLoading(false);
       return;
@@ -79,40 +81,70 @@ export default function LoginPage() {
     safeCookieStorage.setItem("access_token", res.json.access_token);
     safeCookieStorage.setItem("refresh_token", res.json.refresh_token);
     setToken(res.json.access_token);
-    toast.success("Welcome!");
+    toast.success("Добро пожаловать!");
     router.push("/app/scenarios");
   }
 
   return (
-    <div className="flex mt-40 justify-center bg-background">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 p-6">
-        <h1 className="text-display-2 mb-6">Login</h1>
-        <Field>
-          <FieldLabel>Email</FieldLabel>
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            aria-invalid={!!errors.email}
-          />
-          <FieldError errors={errors.email ? [{ message: errors.email }] : []} />
-        </Field>
-        <Field>
-          <FieldLabel>Password</FieldLabel>
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            aria-invalid={!!errors.password}
-          />
-          <FieldError errors={errors.password ? [{ message: errors.password }] : []} />
-        </Field>
-        <Button type="submit" disabled={loading} className="w-full mt-4">
-          {loading ? "Logging in..." : "Login"}
-        </Button>
-      </form>
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
+      <div className="w-full max-w-md space-y-8">
+        {/* Header Section */}
+        <div className="text-center space-y-3">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/20">
+            <ShieldCheck className="h-7 w-7" />
+          </div>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+            Вход в систему
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Введите свои учетные данные для доступа к панели управления
+          </p>
+        </div>
+
+        {/* Form Card */}
+        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Field>
+              <FieldLabel>Email</FieldLabel>
+              <Input
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                aria-invalid={!!errors.email}
+                className="h-11"
+              />
+              <FieldError errors={errors.email ? [{ message: errors.email }] : []} />
+            </Field>
+
+            <Field>
+              <FieldLabel>Пароль</FieldLabel>
+              <Input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                aria-invalid={!!errors.password}
+                className="h-11"
+              />
+              <FieldError errors={errors.password ? [{ message: errors.password }] : []} />
+            </Field>
+
+            <Button 
+              type="submit" 
+              disabled={loading} 
+              className="w-full h-11 text-base font-medium rounded-xl"
+            >
+              {loading ? "Выполняется вход..." : "Войти"}
+            </Button>
+          </form>
+        </div>
+
+        {/* Footer Note */}
+        <p className="text-center text-xs text-muted-foreground">
+          Защищенное соединение. Ваши данные в безопасности.
+        </p>
+      </div>
     </div>
   );
 }

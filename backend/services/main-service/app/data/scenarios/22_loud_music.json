@@ -6,11 +6,7 @@
   "service_class": "any",
   "passenger_type": "regular",
   "stage": "in_flight",
-<<<<<<< HEAD
-  "regulatory_ref": "СТО РЖД 03.011-2026, прил. А; СТО РЖД 03.009",
-=======
   "regulatory_ref": "СТО РЖД 03.011-2026",
->>>>>>> main
   "difficulty": "easy",
   "xp_reward": 100,
   "start_node_key": "start",
@@ -21,9 +17,36 @@
       "text": "Вагон класса «комфорт», 15:40. Пассажир у окна смотрит видео без наушников. Сосед напротив уже дважды выразительно посмотрел на проводника.",
       "timer_seconds": 30,
       "choices": [
-        {"label": "«Будьте добры, сделайте звук тише или используйте наушники. Спасибо за понимание»", "next_node_key": "end_ok", "loyalty_delta": 15, "safety_delta": 5, "score_delta": 25, "competence": "role_model_communication", "role_step": "offer_solution", "order_index": 0},
-        {"label": "«Обращаю Ваше внимание, что просмотр видео без наушников нарушает комфорт других пассажиров»", "next_node_key": "soft_rule", "loyalty_delta": 5, "safety_delta": 5, "score_delta": 10, "competence": "role_model_communication", "role_step": "state_rule", "order_index": 1},
-        {"label": "Сделать вид, что не заметили", "next_node_key": "end_bad", "loyalty_delta": -15, "safety_delta": -5, "score_delta": -10, "competence": "service", "role_step": null, "order_index": 2}
+        {
+          "label": "«Будьте добры, сделайте звук тише или используйте наушники. Спасибо за понимание»",
+          "next_node_key": "end_ok",
+          "loyalty_delta": 15,
+          "safety_delta": 5,
+          "score_delta": 25,
+          "competence": "role_model_communication",
+          "role_step": "offer_solution",
+          "order_index": 0
+        },
+        {
+          "label": "«Обращаю Ваше внимание, что просмотр видео без наушников нарушает комфорт других пассажиров»",
+          "next_node_key": "soft_rule",
+          "loyalty_delta": 5,
+          "safety_delta": 5,
+          "score_delta": 10,
+          "competence": "role_model_communication",
+          "role_step": "state_rule",
+          "order_index": 1
+        },
+        {
+          "label": "Сделать вид, что не заметили",
+          "next_node_key": "end_bad",
+          "loyalty_delta": -15,
+          "safety_delta": -5,
+          "score_delta": -10,
+          "competence": "service",
+          "role_step": null,
+          "order_index": 2
+        }
       ]
     },
     {
@@ -32,11 +55,29 @@
       "text": "Пассажир раздражён: «А что, собственно, нарушаю? Покажите правило». Окружающие наблюдают.",
       "timer_seconds": 20,
       "choices": [
-        {"label": "«Понимаю, ситуация неприятная. Согласно правилам проезда в вагоне необходимо использовать наушники. Позвольте предложить Вам наушники из набора»", "next_node_key": "end_ok", "loyalty_delta": 10, "safety_delta": 5, "score_delta": 20, "competence": "role_model_communication", "role_step": "admit", "order_index": 0},
-        {"label": "«Я приглашу начальника поезда для разъяснения»", "next_node_key": "end_mid", "loyalty_delta": -5, "safety_delta": 0, "score_delta": 0, "competence": "safety_escalation", "requires_escalation": "nachalnik_poezda", "role_step": "offer_solution", "order_index": 1}
+        {
+          "label": "«Понимаю, ситуация неприятная. Согласно правилам проезда в вагоне необходимо использовать наушники. Позвольте предложить Вам наушники из набора»",
+          "next_node_key": "end_ok",
+          "loyalty_delta": 10,
+          "safety_delta": 5,
+          "score_delta": 20,
+          "competence": "role_model_communication",
+          "role_step": "admit",
+          "order_index": 0
+        },
+        {
+          "label": "«Я приглашу начальника поезда для разъяснения»",
+          "next_node_key": "end_mid",
+          "loyalty_delta": -5,
+          "safety_delta": 0,
+          "score_delta": 0,
+          "competence": "safety_escalation",
+          "requires_escalation": "nachalnik_poezda",
+          "role_step": "offer_solution",
+          "order_index": 1
+        }
       ]
     },
-<<<<<<< HEAD
     {
       "key": "end_ok",
       "type": "end",
@@ -58,10 +99,5 @@
       "is_terminal": true,
       "choices": []
     }
-=======
-    {"key": "end_ok", "type": "end", "text": "Пассажир надел наушники. Сосед благодарно кивнул. Инцидент исчерпан.", "is_terminal": true, "choices": []},
-    {"key": "end_mid", "type": "end", "text": "Начальник поезда подошёл. Инцидент улажен, но вы потратили ресурс бригады на простую ситуацию.", "is_terminal": true, "choices": []},
-    {"key": "end_bad", "type": "end", "text": "Видео с «равнодушным проводником» попало в соцсети. Жалоба через приложение.", "is_terminal": true, "choices": []}
->>>>>>> main
   ]
 }

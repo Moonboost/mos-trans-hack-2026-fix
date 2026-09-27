@@ -6,11 +6,7 @@
   "service_class": "any",
   "passenger_type": "allergic",
   "stage": "in_flight",
-<<<<<<< HEAD
-  "regulatory_ref": "СТО РЖД 03.011-2026, п. 7.8; СТО РЖД 03.014-2026",
-=======
   "regulatory_ref": "СТО РЖД 03.011-2026, п. 7.8",
->>>>>>> main
   "difficulty": "medium",
   "xp_reward": 150,
   "start_node_key": "start",
@@ -21,8 +17,26 @@
       "text": "Пассажирка с зудом и слезящимися глазами: «Тут рядом с животным, у меня аллергия». В двух рядах — переноска с кошкой.",
       "timer_seconds": 25,
       "choices": [
-        {"label": "«Понимаю, аллергия может доставлять серьёзный дискомфорт. Сейчас проверю возможность пересадки. Если почувствуете ухудшение — сразу нажмите кнопку вызова»", "next_node_key": "reseat", "loyalty_delta": 15, "safety_delta": 15, "score_delta": 25, "competence": "medical_response", "role_step": "admit", "order_index": 0},
-        {"label": "«Ничем не могу помочь, животное провозится по правилам»", "next_node_key": "end_bad", "loyalty_delta": -20, "safety_delta": -10, "score_delta": -15, "competence": "role_model_communication", "role_step": null, "order_index": 1}
+        {
+          "label": "«Понимаю, аллергия может доставлять серьёзный дискомфорт. Сейчас проверю возможность пересадки. Если почувствуете ухудшение — сразу нажмите кнопку вызова»",
+          "next_node_key": "reseat",
+          "loyalty_delta": 15,
+          "safety_delta": 15,
+          "score_delta": 25,
+          "competence": "medical_response",
+          "role_step": "admit",
+          "order_index": 0
+        },
+        {
+          "label": "«Ничем не могу помочь, животное провозится по правилам»",
+          "next_node_key": "end_bad",
+          "loyalty_delta": -20,
+          "safety_delta": -10,
+          "score_delta": -15,
+          "competence": "role_model_communication",
+          "role_step": null,
+          "order_index": 1
+        }
       ]
     },
     {
@@ -31,11 +45,28 @@
       "text": "Свободное место есть в 3-м ряду, дальше от животного.",
       "timer_seconds": 20,
       "choices": [
-        {"label": "Помочь перейти на новое место, предупредить о расположении вагонов с животными (по схеме поезда)", "next_node_key": "end_ok", "loyalty_delta": 10, "safety_delta": 5, "score_delta": 20, "competence": "medical_response", "role_step": "offer_solution", "order_index": 0},
-        {"label": "Пересадить, но без объяснений", "next_node_key": "end_mid", "loyalty_delta": 5, "safety_delta": 5, "score_delta": 10, "competence": "medical_response", "role_step": "offer_solution", "order_index": 1}
+        {
+          "label": "Помочь перейти на новое место, предупредить о расположении вагонов с животными (по схеме поезда)",
+          "next_node_key": "end_ok",
+          "loyalty_delta": 10,
+          "safety_delta": 5,
+          "score_delta": 20,
+          "competence": "medical_response",
+          "role_step": "offer_solution",
+          "order_index": 0
+        },
+        {
+          "label": "Пересадить, но без объяснений",
+          "next_node_key": "end_mid",
+          "loyalty_delta": 5,
+          "safety_delta": 5,
+          "score_delta": 10,
+          "competence": "medical_response",
+          "role_step": "offer_solution",
+          "order_index": 1
+        }
       ]
     },
-<<<<<<< HEAD
     {
       "key": "end_ok",
       "type": "end",
@@ -57,10 +88,5 @@
       "is_terminal": true,
       "choices": []
     }
-=======
-    {"key": "end_ok", "type": "end", "text": "Пассажирка благодарит, взяла контакт информационной стойки на будущее.", "is_terminal": true, "choices": []},
-    {"key": "end_mid", "type": "end", "text": "Формально помогли, но без понимания на будущее.", "is_terminal": true, "choices": []},
-    {"key": "end_bad", "type": "end", "text": "Жалоба: «проигнорировали медицинскую ситуацию».", "is_terminal": true, "choices": []}
->>>>>>> main
   ]
 }

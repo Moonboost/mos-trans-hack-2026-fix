@@ -6,11 +6,7 @@
   "service_class": "business",
   "passenger_type": "regular",
   "stage": "in_flight",
-<<<<<<< HEAD
-  "regulatory_ref": "СТО РЖД 03.011-2026, п. 7.1.3, п. 5.3",
-=======
   "regulatory_ref": "СТО РЖД 03.011-2026, п. 7.1.3",
->>>>>>> main
   "difficulty": "medium",
   "xp_reward": 150,
   "start_node_key": "start",
@@ -21,9 +17,36 @@
       "text": "Вагон «стандарт». Пассажир: «Я готов доплатить, пересадите меня в бизнес, там же пусто».",
       "timer_seconds": 30,
       "choices": [
-        {"label": "«Понимаю Ваше желание. Сейчас уточню наличие мест и возможность доплаты через мобильную кассу. До оформления прошу оставаться на месте по билету»", "next_node_key": "confirm", "loyalty_delta": 15, "safety_delta": 5, "score_delta": 25, "competence": "service_class_knowledge", "role_step": "admit", "order_index": 0},
-        {"label": "«Нет, к сожалению, мест нет» — не уточняя", "next_node_key": "end_bad", "loyalty_delta": -15, "safety_delta": 0, "score_delta": -10, "competence": "service_class_knowledge", "role_step": null, "order_index": 1},
-        {"label": "Пересадить пассажира сразу, оплата потом", "next_node_key": "end_fail", "loyalty_delta": 5, "safety_delta": -15, "score_delta": -20, "competence": "service_class_knowledge", "role_step": null, "order_index": 2}
+        {
+          "label": "«Понимаю Ваше желание. Сейчас уточню наличие мест и возможность доплаты через мобильную кассу. До оформления прошу оставаться на месте по билету»",
+          "next_node_key": "confirm",
+          "loyalty_delta": 15,
+          "safety_delta": 5,
+          "score_delta": 25,
+          "competence": "service_class_knowledge",
+          "role_step": "admit",
+          "order_index": 0
+        },
+        {
+          "label": "«Нет, к сожалению, мест нет» — не уточняя",
+          "next_node_key": "end_bad",
+          "loyalty_delta": -15,
+          "safety_delta": 0,
+          "score_delta": -10,
+          "competence": "service_class_knowledge",
+          "role_step": null,
+          "order_index": 1
+        },
+        {
+          "label": "Пересадить пассажира сразу, оплата потом",
+          "next_node_key": "end_fail",
+          "loyalty_delta": 5,
+          "safety_delta": -15,
+          "score_delta": -20,
+          "competence": "service_class_knowledge",
+          "role_step": null,
+          "order_index": 2
+        }
       ]
     },
     {
@@ -32,11 +55,28 @@
       "text": "Свободные места в бизнес-классе есть. Оформление доплаты через мобильную кассу доступно.",
       "timer_seconds": 20,
       "choices": [
-        {"label": "Оформить доплату, проводить пассажира на новое место, помочь с багажом", "next_node_key": "end_ok", "loyalty_delta": 15, "safety_delta": 10, "score_delta": 25, "competence": "service_class_knowledge", "role_step": "offer_solution", "order_index": 0},
-        {"label": "«Оформление невозможно, обратитесь в контактный центр»", "next_node_key": "end_mid", "loyalty_delta": -10, "safety_delta": 0, "score_delta": -5, "competence": "service_class_knowledge", "role_step": null, "order_index": 1}
+        {
+          "label": "Оформить доплату, проводить пассажира на новое место, помочь с багажом",
+          "next_node_key": "end_ok",
+          "loyalty_delta": 15,
+          "safety_delta": 10,
+          "score_delta": 25,
+          "competence": "service_class_knowledge",
+          "role_step": "offer_solution",
+          "order_index": 0
+        },
+        {
+          "label": "«Оформление невозможно, обратитесь в контактный центр»",
+          "next_node_key": "end_mid",
+          "loyalty_delta": -10,
+          "safety_delta": 0,
+          "score_delta": -5,
+          "competence": "service_class_knowledge",
+          "role_step": null,
+          "order_index": 1
+        }
       ]
     },
-<<<<<<< HEAD
     {
       "key": "end_ok",
       "type": "end",
@@ -65,11 +105,5 @@
       "is_terminal": true,
       "choices": []
     }
-=======
-    {"key": "end_ok", "type": "end", "text": "Пассажир доволен, апгрейд оформлен по правилам.", "is_terminal": true, "choices": []},
-    {"key": "end_mid", "type": "end", "text": "Формально верно, но клиент ушёл с ощущением «вам всё равно».", "is_terminal": true, "choices": []},
-    {"key": "end_fail", "type": "end", "text": "Нарушение порядка оплаты. Разбор с руководством бригады.", "is_terminal": true, "choices": []},
-    {"key": "end_bad", "type": "end", "text": "Жалоба: «проводник не проверил наличие мест».", "is_terminal": true, "choices": []}
->>>>>>> main
   ]
 }

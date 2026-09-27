@@ -4,6 +4,7 @@ services:
       context: ./services/main-service
       dockerfile: Dockerfile
     container_name: main-service
+    profiles: ["dev", "prod"]
     ports:
       - "8000:8000"
     dns:
@@ -29,6 +30,7 @@ services:
   main-db:
     image: postgres:15-alpine
     container_name: main-db
+    profiles: ["dev", "prod"]
     env_file: ../.env
     environment:
       POSTGRES_USER: ${MAIN_DB_USER}
@@ -48,11 +50,12 @@ services:
   valkey:
     image: valkey/valkey:7-alpine
     container_name: valkey
+    profiles: ["dev", "prod"]
     command: valkey-server --requirepass ${CACHE_PASSWORD} --appendonly yes
     networks:
       - main-network
     healthcheck:
-      test: [ "CMD", "valkey-cli", "ping" ]
+      test: ["CMD", "valkey-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5

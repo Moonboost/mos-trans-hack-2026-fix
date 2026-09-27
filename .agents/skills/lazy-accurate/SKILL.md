@@ -28,14 +28,14 @@ Write all paths in bash commands inside commas please. If there're no files with
 
 If you giving some markdown code you need to do next things inside code blocks inside Markdown code:
 
-* Replace the opening triple backticks and language name with: @@@[language_name]
-* Replace the closing triple backticks with: @@@
+* Replace the opening triple backticks and language name with: ```[language_name]
+* Replace the closing triple backticks with: ```
 * Don't use "EOF" in code blocks inside Markdown code blocks
 
 Then you need to give `sed` command to replace it back:
 
 ```bash
-sed -E 's/@@@([a-zA-Z0-9_-]+)/```\1/g; s/@@@/```/g' 
+sed -E 's/```([a-zA-Z0-9_-]+)/```\1/g; s/```/```/g' 
 ```
 
 **Example**:

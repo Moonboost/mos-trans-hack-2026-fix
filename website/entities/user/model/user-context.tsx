@@ -1,11 +1,19 @@
 "use client"
 
-import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react"
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
+import { useRouter } from "next/navigation"
 import { fetchMe } from "@/entities/user/api/fetch-me"
 import { getTokenExpiration } from "@/utils/get-token-expiration"
 import { $fetch } from "@/utils/fetch"
 import { safeCookieStorage } from "@/utils/safe-cookie-storage"
-import { useRouter } from "next/navigation"
 
 interface UserContextType {
   user: any
@@ -25,43 +33,15 @@ export default function UserProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const router = useRouter()
 
+  // Guards against React StrictMode's double-effect invocation in dev,
+  // and against multiple concurrent refreshes on rapid navigations.
+  const initRef = useRef(false)
+
   const getUser = useCallback(async () => {
     setIsLoading(true)
     const user_ = await fetchMe()
     setUser(user_)
     setIsLoading(false)
-  }, [])
-
-  async function init() {
-    const refresh_token = safeCookieStorage.getItem("refresh_token")
-    const access_token = safeCookieStorage.getItem("access_token")
-
-    if (!refresh_token || !access_token) {
-      setIsLoading(false)
-      return
-    }
-
-    const expTime = getTokenExpiration(access_token)
-    const isExpired = expTime ? Date.now() >= expTime : true
-
-    if (isExpired) {
-      const response = await $fetch("/api/v1/refresh", {
-        method: "POST",
-        body: JSON.stringify({ refresh_token }),
-        headers: { "Content-Type": "application/json" }
-      })
-      const new_access_token = response?.json?.access_token
-      if (new_access_token) {
-        safeCookieStorage.setItem("access_token", new_access_token)
-        setToken(new_access_token)
-      }
-    } else {
-      setToken(access_token)
-    }
-  }
-
-  useEffect(() => {
-    init()
   }, [])
 
   function clearAuth() {
@@ -73,11 +53,51 @@ export default function UserProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
+    if (initRef.current) return
+    initRef.current = true
+
+    ;(async () => {
+      const refresh_token = safeCookieStorage.getItem("refresh_token")
+      const access_token = safeCookieStorage.getItem("access_token")
+
+      if (!refresh_token || !access_token) {
+        setIsLoading(false)
+        return
+      }
+
+      const expTime = getTokenExpiration(access_token)
+      const isExpired = expTime ? Date.now() >= expTime : true
+
+      if (!isExpired) {
+        setToken(access_token)
+        return
+      }
+
+      // Access token expired — try one refresh.
+      const res = await $fetch("/api/v1/refresh", {
+        method: "POST",
+        body: JSON.stringify({ refresh_token }),
+        headers: { "Content-Type": "application/json" },
+        isToast: false,
+      })
+
+      const new_access = res?.json?.access_token
+      if (new_access) {
+        safeCookieStorage.setItem("access_token", new_access)
+        setToken(new_access)
+      } else {
+        // Refresh failed (network, 400, 401) — drop the session so
+        // CheckUser can route to /login instead of hanging on a
+        // spinner forever.
+        clearAuth()
+      }
+    })()
+  }, [])
+
+  useEffect(() => {
     if (token) {
       safeCookieStorage.setItem("access_token", token)
       getUser()
-    } else if (token === null && !isLoading) {
-      clearAuth()
     }
   }, [token, getUser])
 
@@ -86,14 +106,17 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     await $fetch("/api/v1/logout", {
       method: "POST",
       body: JSON.stringify({ refresh_token }),
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
+      isToast: false,
     })
     clearAuth()
     router.push("/login")
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser, token, setToken, isLoading, setIsLoading, logout }}>
+    <UserContext.Provider
+      value={{ user, setUser, token, setToken, isLoading, setIsLoading, logout }}
+    >
       {children}
     </UserContext.Provider>
   )

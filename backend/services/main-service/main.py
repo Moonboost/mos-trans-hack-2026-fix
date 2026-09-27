@@ -14,8 +14,19 @@ logger.info("Starting main service")
 app = FastAPI(title="Main Service", version="1.0.0", root_path="/api")
 
 # CORS
-raw_origins = os.getenv("ALLOWED_ORIGINS")
-origins = [origin.strip() for origin in raw_origins.split(",")]
+# ALLOWED_ORIGINS may be empty in dev. Splitting "" yields [""], which
+# matches no browser origin and makes every preflight fail with 400.
+# Fall back to a sane dev default instead.
+_raw = os.getenv("ALLOWED_ORIGINS", "") or ""
+origins = [o.strip() for o in _raw.split(",") if o.strip()]
+if not origins:
+    origins = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost",
+        "http://127.0.0.1",
+    ]
+logger.info("CORS allowed origins: %s", origins)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

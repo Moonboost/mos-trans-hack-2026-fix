@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
   Train, Timer, Scales, TrophyIcon, Users, ShieldCheck,
   WarningCircle, Heartbeat, ChatCircleDots, ArrowRight,
-  BookOpen, Wheelchair, Siren, UserCircle,
+  BookOpen, Wheelchair, Siren, UserCircle, Armchair,
 } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -145,6 +145,12 @@ const STANDARDS = [
     code: "СТО РЖД 03.014–2026",
     title: "Маломобильные пассажиры",
     text: "Функциональные требования к подвижному составу и вокзальным комплексам.",
+  },
+  {
+    icon: Armchair,
+    code: "СТО РЖД 03.012–2026",
+    title: "Бизнес-залы на вокзалах",
+    text: "Требования к обслуживанию в зонах повышенной комфортности.",
   },
 ];
 
@@ -415,7 +421,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {STANDARDS.map((s) => {
               const Icon = s.icon;
               return (

@@ -7,20 +7,21 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import UserProvider from "@/entities/user/model/user-context";
 import ClientRootLayout from "./client-layout";
 
-// Import fonts locally here
-export const Geist = localFont({
-  src: '../public/fonts/Geist-VariableFont_wght.woff2',
-  variable: '--font-sans',
+// Moscow Transport brand typeface.
+// Regular (400)   -> body / UI text
+// ExtraBold (800) -> display + headings
+export const MoscowSans = localFont({
+  src: [
+    { path: '../public/fonts/Moscow-Sans-Regular.woff2',    weight: '400', style: 'normal' },
+    { path: '../public/fonts/Moscow-Sans-Extra-Bold.woff2', weight: '800', style: 'normal' },
+  ],
+  variable: '--font-moscow-sans',
+  display: 'swap',
 });
 
-// export const OtherLocalFont = localFont({
-//   src: '../public/fonts/OtherLocalFont.woff2',
-//   variable: '--font-heading',
-// });
-
 export const metadata: Metadata = {
-  title: "Amorfa app",
-  description: "Amorfa application",
+  title: "Геймификация для ВСМ · Московский транспорт",
+  description: "Тренажёр проводника высокоскоростной магистрали ВСМ-400",
 };
 
 export default function RootLayout({
@@ -30,8 +31,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={cn(Geist.className, "font-sans")}
+      lang="ru"
+      className={cn(MoscowSans.variable, MoscowSans.className, "font-sans")}
       suppressHydrationWarning
     >
       <head>

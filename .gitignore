@@ -33,7 +33,7 @@ services/*/tmp/
 aider*
 repomix-output*
 
-openapi.json
+# openapi.json
 
 letsencrypt/
 

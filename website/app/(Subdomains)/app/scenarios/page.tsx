@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { listScenarios } from "@/entities/scenario/api/client";
 import type { Scenario } from "@/entities/scenario/model/types";
-import { Trophy, Target } from "lucide-react";
+import { TrophyIcon, Target } from "@phosphor-icons/react";
 
 const CATEGORY_LABEL: Record<string, string> = {
   conflict: "Конфликт",
@@ -52,8 +52,8 @@ export default function ScenariosPage() {
         /* Scenarios Grid */
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {items.map((s) => (
-            <Card 
-              key={s.slug} 
+            <Card
+              key={s.slug}
               className="group flex flex-col gap-4 p-6 transition-all duration-300 hover:border-primary/50 hover:bg-accent/50"
             >
               <CardHeader className="p-0 space-y-3">
@@ -76,7 +76,7 @@ export default function ScenariosPage() {
               <CardFooter className="p-0 flex items-center justify-between pt-4 border-t border-border mt-auto">
                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1">
-                    <Trophy className="w-3.5 h-3.5" />
+                    <TrophyIcon className="w-3.5 h-3.5" />
                     +{s.xp_reward} XP
                   </span>
                   <span className="flex items-center gap-1">

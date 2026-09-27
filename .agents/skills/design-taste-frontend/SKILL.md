@@ -139,7 +139,7 @@ Unless the design read picks a real design system (Section 2.A), these are the d
 
 ### 3.C Icons
 * **Allowed libraries (priority order):** `@phosphor-icons/react`, `hugeicons-react`, `@radix-ui/react-icons`, `@tabler/icons-react`.
-* **Discouraged:** `lucide-react`. Acceptable only when the user explicitly asks for it or the project already depends on it.
+* **Discouraged:** `@phosphor-icons/react`. Acceptable only when the user explicitly asks for it or the project already depends on it.
 * **NEVER hand-roll SVG icons.** If a glyph is missing, install a second library or compose from primitives - do not draw icon paths from scratch.
 * **One family per project.** Do not mix Phosphor with Lucide in the same component tree.
 * **Standardize `strokeWidth` globally** (e.g. `1.5` or `2.0`).

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { fetchLeaderboard } from "@/entities/scenario/api/client";
-import { Trophy, Medal, Award, Sparkles } from "lucide-react";
+import { TrophyIcon, MedalIcon, CertificateIcon, SparkleIcon } from "@phosphor-icons/react"
 
 interface Row {
   user_id: string;
@@ -29,7 +29,7 @@ export default function LeaderboardPage() {
       {/* Header Section */}
       <div className="flex items-center gap-3">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-          <Trophy className="h-6 w-6" />
+          <TrophyIcon className="h-6 w-6" />
         </div>
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
@@ -66,7 +66,7 @@ export default function LeaderboardPage() {
           {rows.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted/50 text-muted-foreground">
-                <Sparkles className="h-8 w-8" />
+                <SparkleIcon className="h-8 w-8" />
               </div>
               <h3 className="text-lg font-medium text-foreground">
                 Пока никто не играл
@@ -94,11 +94,11 @@ export default function LeaderboardPage() {
                   const isTop = rank <= 3;
                   const medalIcon =
                     rank === 1 ? (
-                      <Trophy className="h-4 w-4 text-yellow-500" />
+                      <TrophyIcon className="h-4 w-4 text-yellow-500" />
                     ) : rank === 2 ? (
-                      <Medal className="h-4 w-4 text-gray-400" />
+                      <MedalIcon className="h-4 w-4 text-gray-400" />
                     ) : rank === 3 ? (
-                      <Award className="h-4 w-4 text-amber-700" />
+                      <CertificateIcon className="h-4 w-4 text-amber-700" />
                     ) : null;
 
                   return (

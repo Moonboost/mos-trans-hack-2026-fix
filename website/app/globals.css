@@ -64,68 +64,68 @@
   --on-g-dark: var(--white);
 
   /* --font-heading: "OtherLocalFont", sans-serif; */
-  --font-sans: "Geist", sans-serif;
+  --font-sans: var(--font-moscow-sans), "Geist", sans-serif;
 
   --lh-heading: 1.2;
   --lh-body: 1.5;
 
   --display-1-size: 3rem;
-  --display-1-weight: 500;
+  --display-1-weight: 800;
   --display-1-font-face: var(--font-sans);
   --display-1-lh: var(--lh-heading);
 
   --display-2-size: 2.25rem;
-  --display-2-weight: 500;
+  --display-2-weight: 800;
   --display-2-font-face: var(--font-sans);
   --display-2-lh: var(--lh-heading);
 
   --display-3-size: 2rem;
-  --display-3-weight: 500;
+  --display-3-weight: 800;
   --display-3-font-face: var(--font-sans);
   --display-3-lh: var(--lh-heading);
 
   --display-4-size: 1.5rem;
-  --display-4-weight: 500;
+  --display-4-weight: 800;
   --display-4-font-face: var(--font-sans);
   --display-4-lh: var(--lh-heading);
 
   --display-5-size: 1.25rem;
-  --display-5-weight: 500;
+  --display-5-weight: 800;
   --display-5-font-face: var(--font-sans);
   --display-5-lh: var(--lh-heading);
 
   --display-6-size: 1.125rem;
-  --display-6-weight: 500;
+  --display-6-weight: 800;
   --display-6-font-face: var(--font-sans);
   --display-6-lh: var(--lh-heading);
 
   --heading-1-size: 1.875rem;
-  --heading-1-weight: 500;
+  --heading-1-weight: 800;
   --heading-1-font-face: var(--font-sans);
   --heading-1-lh: var(--lh-heading);
 
   --heading-2-size: 1.5rem;
-  --heading-2-weight: 500;
+  --heading-2-weight: 800;
   --heading-2-font-face: var(--font-sans);
   --heading-2-lh: var(--lh-heading);
 
   --heading-3-size: 1.25rem;
-  --heading-3-weight: 500;
+  --heading-3-weight: 800;
   --heading-3-font-face: var(--font-sans);
   --heading-3-lh: var(--lh-heading);
 
   --heading-4-size: 1.125rem;
-  --heading-4-weight: 500;
+  --heading-4-weight: 800;
   --heading-4-font-face: var(--font-sans);
   --heading-4-lh: var(--lh-heading);
 
   --heading-5-size: 1rem;
-  --heading-5-weight: 500;
+  --heading-5-weight: 800;
   --heading-5-font-face: var(--font-sans);
   --heading-5-lh: var(--lh-heading);
 
   --heading-6-size: 0.875rem;
-  --heading-6-weight: 500;
+  --heading-6-weight: 800;
   --heading-6-font-face: var(--font-sans);
   --heading-6-lh: var(--lh-heading);
 

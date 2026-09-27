@@ -1,18 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { $fetch } from "@/utils/fetch";
 import { toast } from "sonner";
+import { z } from "zod";
+import { $fetch } from "@/utils/fetch";
 import { safeCookieStorage } from "@/utils/safe-cookie-storage";
 import { useUser } from "@/entities/user/model/user-context";
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { z } from "zod";
-import { ShieldCheck } from "lucide-react";
+import { AuthShell } from "@/components/auth/auth-shell";
+import {
+  AuthInput,
+  AuthLabel,
+  AuthError,
+  AuthSubmit,
+} from "@/components/auth/auth-field";
 
-const loginSchema = z.object({
+const schema = z.object({
   email: z.string().email("Некорректный email"),
   password: z.string().min(1, "Пароль обязателен"),
 });
@@ -30,14 +34,13 @@ export default function LoginPage() {
     setErrors({});
     setLoading(true);
 
-    // Client-side validation with Zod
-    const result = loginSchema.safeParse({ email, password });
-    if (!result.success) {
-      const fieldErrors: Record<string, string> = {};
-      result.error.issues.forEach((issue) => {
-        if (issue.path[0]) fieldErrors[issue.path[0] as string] = issue.message;
+    const parsed = schema.safeParse({ email, password });
+    if (!parsed.success) {
+      const field: Record<string, string> = {};
+      parsed.error.issues.forEach((i) => {
+        if (i.path[0]) field[i.path[0] as string] = i.message;
       });
-      setErrors(fieldErrors);
+      setErrors(field);
       setLoading(false);
       return;
     }
@@ -49,102 +52,92 @@ export default function LoginPage() {
       isToast: false,
     });
 
-    // Handle 5xx (server errors)
     if (res.response && res.response.status >= 500) {
       toast.error("Ошибка сервера. Попробуйте позже.");
       setLoading(false);
       return;
     }
 
-    // Handle non-OK responses (401, 403, 404, 422, etc.)
     if (!res.response?.ok) {
-      // If 422 and detail is an array (FastAPI validation)
       if (res.response?.status === 422 && Array.isArray(res.json?.detail)) {
-        const fieldErrors: Record<string, string> = {};
+        const field: Record<string, string> = {};
         res.json.detail.forEach((err: any) => {
           const loc = err.loc;
-          if (loc && loc.length > 1) {
-            const field = loc[1];
-            fieldErrors[field] = err.msg;
-          }
+          if (loc && loc.length > 1) field[loc[1]] = err.msg;
         });
-        setErrors(fieldErrors);
+        setErrors(field);
       } else {
-        // Non‑422 errors: show toast or message
-        toast.error(res.json?.message || "Ошибка входа");
+        toast.error(res.json?.message || "Не удалось войти");
       }
       setLoading(false);
       return;
     }
 
-    // Success: store tokens and redirect
     safeCookieStorage.setItem("access_token", res.json.access_token);
     safeCookieStorage.setItem("refresh_token", res.json.refresh_token);
     setToken(res.json.access_token);
-    toast.success("Добро пожаловать!");
     router.push("/app/scenarios");
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-md space-y-8">
-        {/* Header Section */}
-        <div className="text-center space-y-3">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/20">
-            <ShieldCheck className="h-7 w-7" />
-          </div>
-          <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-            Вход в систему
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Введите свои учетные данные для доступа к панели управления
-          </p>
-        </div>
-
-        {/* Form Card */}
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <Field>
-              <FieldLabel>Email</FieldLabel>
-              <Input
-                type="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                aria-invalid={!!errors.email}
-                className="h-11"
-              />
-              <FieldError errors={errors.email ? [{ message: errors.email }] : []} />
-            </Field>
-
-            <Field>
-              <FieldLabel>Пароль</FieldLabel>
-              <Input
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                aria-invalid={!!errors.password}
-                className="h-11"
-              />
-              <FieldError errors={errors.password ? [{ message: errors.password }] : []} />
-            </Field>
-
-            <Button 
-              type="submit" 
-              disabled={loading} 
-              className="w-full h-11 text-base font-medium rounded-xl"
-            >
-              {loading ? "Выполняется вход..." : "Войти"}
-            </Button>
-          </form>
-        </div>
-
-        {/* Footer Note */}
-        <p className="text-center text-xs text-muted-foreground">
-          Защищенное соединение. Ваши данные в безопасности.
+    <AuthShell
+      title="Вход в систему"
+      subtitle="Используйте рабочую почту, чтобы продолжить обучение."
+      footer={
+        <p className="text-[13px] text-(--on-bg-medium)">
+          Нет аккаунта?{" "}
+          <Link
+            href="/register"
+            className="text-(--brand-9) hover:underline underline-offset-4 font-medium"
+          >
+            Создать
+          </Link>
         </p>
-      </div>
-    </div>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <AuthLabel htmlFor="email">Email</AuthLabel>
+          <AuthInput
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            aria-invalid={!!errors.email}
+          />
+          <AuthError>{errors.email}</AuthError>
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <AuthLabel htmlFor="password" className="mb-0">
+              Пароль
+            </AuthLabel>
+            <Link
+              href="/reset"
+              className="text-[11px] text-(--on-bg-low) hover:text-(--on-bg-high)"
+            >
+              Забыли?
+            </Link>
+          </div>
+          <AuthInput
+            id="password"
+            type="password"
+            autoComplete="current-password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            aria-invalid={!!errors.password}
+          />
+          <AuthError>{errors.password}</AuthError>
+        </div>
+
+        <AuthSubmit type="submit" loading={loading}>
+          Войти
+        </AuthSubmit>
+      </form>
+    </AuthShell>
   );
 }

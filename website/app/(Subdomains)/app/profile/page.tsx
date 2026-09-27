@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { $fetch } from "@/utils/fetch";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { User, Mail, Save, X, Pencil } from "lucide-react";
+import { User, Mail, Save, X, Pencil } from "@phosphor-icons/react";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -150,9 +150,9 @@ export default function ProfilePage() {
             </Field>
 
             <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
-              <Button 
-                type="submit" 
-                disabled={loading} 
+              <Button
+                type="submit"
+                disabled={loading}
                 className="h-11 flex-1 sm:flex-none gap-2 rounded-xl"
               >
                 {loading ? (
@@ -164,9 +164,9 @@ export default function ProfilePage() {
                   </>
                 )}
               </Button>
-              <Button 
-                type="button" 
-                variant="text" 
+              <Button
+                type="button"
+                variant="text"
                 onClick={() => {
                   setEditing(false);
                   setName(user.name || "");

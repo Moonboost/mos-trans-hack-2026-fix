@@ -118,10 +118,17 @@ ACHIEVEMENTS = [
 ]
 
 
+# Model columns on Achievement. Keys outside this set in the seed data
+# (competence, min_value) are documentation duplicates of what already
+# lives inside `condition` and must not reach the ORM constructor.
+ACHIEVEMENT_MODEL_FIELDS = {"code", "title", "description", "icon", "condition"}
+
 def seed_achievements(db: Session):
     for item in ACHIEVEMENTS:
-        if not db.query(Achievement).filter_by(code=item["code"]).first():
-            db.add(Achievement(**item))
+        if db.query(Achievement).filter_by(code=item["code"]).first():
+            continue
+        payload = {k: v for k, v in item.items() if k in ACHIEVEMENT_MODEL_FIELDS}
+        db.add(Achievement(**payload))
     db.commit()
 
 

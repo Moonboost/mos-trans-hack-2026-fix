@@ -103,6 +103,7 @@ export interface Scenario {
   difficulty: string;
   xp_reward: number;
   start_node_key: string;
+  timer_seconds?: number | null;
 }
 
 export interface RunState {

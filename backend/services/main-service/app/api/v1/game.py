@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from uuid import UUID
 from app.models.user import User
-from app.models.game import Scenario, ScenarioStatus, ScenarioRun
+from app.models.game import (
+    Scenario, ScenarioNode, ScenarioStatus, ScenarioRun,
+)
 from app.schemas.game import (ChooseRequest, ScenarioOut, RunOut, ReportOut, ProfileOut)
 from app.services.scenario_engine import (start_run, apply_choice, load_node,
                                           serialize_node, build_report)
@@ -17,9 +19,33 @@ router = APIRouter(prefix="/game", tags=["game"])
 @router.get("/scenarios")
 def list_scenarios(db: Session = Depends(get_db), _: User = Depends(get_current_user)) -> list[ScenarioOut]:
     rows = db.query(Scenario).filter(Scenario.status == ScenarioStatus.active).all()
-    return [ScenarioOut(slug=s.slug, title=s.title, description=s.description,
-                        category=s.category, difficulty=s.difficulty,
-                        xp_reward=s.xp_reward, start_node_key=s.start_node_key) for s in rows]
+    result = []
+    for s in rows:
+        start = (
+            db.query(ScenarioNode)
+            .filter(
+                ScenarioNode.scenario_id == s.id,
+                ScenarioNode.node_key == s.start_node_key,
+            )
+            .first()
+        )
+        result.append(
+            ScenarioOut(
+                slug=s.slug,
+                title=s.title,
+                description=s.description,
+                category=s.category,
+                difficulty=s.difficulty,
+                xp_reward=s.xp_reward,
+                start_node_key=s.start_node_key,
+                service_class=s.service_class,
+                passenger_type=s.passenger_type,
+                stage=s.stage,
+                regulatory_ref=s.regulatory_ref,
+                timer_seconds=start.timer_seconds if start else None,
+            )
+        )
+    return result
 
 
 @router.post("/scenarios/{slug}/start")

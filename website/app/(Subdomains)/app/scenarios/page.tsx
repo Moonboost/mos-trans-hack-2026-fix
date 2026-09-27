@@ -2,18 +2,36 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import {
+  Clock,
+  ShieldCheck,
+  Siren,
+  Heartbeat,
+  Train,
+} from "@phosphor-icons/react";
 import { Badge } from "@/components/ui/badge";
 import { listScenarios } from "@/entities/scenario/api/client";
 import type { Scenario } from "@/entities/scenario/model/types";
-import { TrophyIcon, Target } from "@phosphor-icons/react";
 
-const CATEGORY_LABEL: Record<string, string> = {
-  conflict: "Конфликт",
-  medical: "Медицина",
-  service: "Сервис",
+const CATEGORY_META: Record<
+  string,
+  { label: string; Icon: React.ComponentType<{ className?: string; weight?: "bold" | "fill" | "regular" }> }
+> = {
+  conflict: { label: "Конфликт", Icon: Siren },
+  medical:  { label: "Медицина", Icon: Heartbeat },
+  service:  { label: "Сервис",   Icon: Train },
 };
+
+const DIFFICULTY_LABEL: Record<string, string> = {
+  easy:   "легко",
+  medium: "средне",
+  hard:   "сложно",
+};
+
+function formatTimer(seconds?: number | null): string {
+  if (!seconds) return "—";
+  return `${seconds} сек`;
+}
 
 export default function ScenariosPage() {
   const [items, setItems] = useState<Scenario[]>([]);
@@ -27,71 +45,80 @@ export default function ScenariosPage() {
 
   return (
     <div className="space-y-8 py-8">
-      {/* Header Section */}
+      {/* Header */}
       <div className="space-y-3">
-        <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+        <h1 className="text-display-3 font-extrabold tracking-tight">
           Сценарии
         </h1>
-        <p className="text-base text-muted-foreground max-w-2xl leading-relaxed">
-          Каждый сценарий — нелинейный диалог с таймером и двумя шкалами: лояльность пассажира и рейтинг безопасности.
+        <p className="text-body-3 text-(--on-bg-medium) max-w-2xl leading-relaxed">
+          Каждый сценарий — нелинейный диалог с таймером и двумя шкалами:
+          лояльность пассажира и рейтинг безопасности.
         </p>
       </div>
 
-      {/* Loading State (Skeleton) */}
+      {/* Loading */}
       {loading ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map((i) => (
-            <Card key={i} className="p-6 animate-pulse">
-              <div className="h-6 bg-muted rounded w-3/4 mb-4" />
-              <div className="h-4 bg-muted rounded w-full mb-2" />
-              <div className="h-4 bg-muted rounded w-2/3" />
-            </Card>
+        <div className="grid gap-4 md:grid-cols-2">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="rounded-2xl border border-(--outline) bg-(--card) p-6 animate-pulse"
+            >
+              <div className="flex justify-between mb-6">
+                <div className="size-12 rounded-xl bg-(--state-hover)" />
+                <div className="h-6 w-20 rounded-full bg-(--state-hover)" />
+              </div>
+              <div className="h-5 w-3/4 rounded bg-(--state-hover) mb-3" />
+              <div className="h-4 w-1/2 rounded bg-(--state-hover)" />
+            </div>
           ))}
         </div>
+      ) : items.length === 0 ? (
+        <div className="rounded-2xl border border-(--outline) bg-(--card) p-12 text-center">
+          <p className="text-body-3 text-(--on-bg-medium)">
+            Пока нет активных сценариев
+          </p>
+        </div>
       ) : (
-        /* Scenarios Grid */
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((s) => (
-            <Card
-              key={s.slug}
-              className="group flex flex-col gap-4 p-6 transition-all duration-300 hover:border-primary/50 hover:bg-accent/50"
-            >
-              <CardHeader className="p-0 space-y-3">
-                <div className="flex items-start justify-between gap-3">
-                  <CardTitle className="text-xl font-semibold leading-tight group-hover:text-primary transition-colors">
+        <div className="grid gap-4 md:grid-cols-2">
+          {items.map((s) => {
+            const meta = CATEGORY_META[s.category] ?? CATEGORY_META.conflict;
+            const Icon = meta.Icon;
+            return (
+              <Link
+                key={s.slug}
+                href={`/app/scenarios/${s.slug}`}
+                className="group block"
+              >
+                <div className="h-full rounded-2xl border border-(--outline) bg-(--card) p-6 transition-all duration-200 group-hover:border-(--brand-9) group-hover:-translate-y-0.5">
+                  {/* Top row: icon tile + category badge */}
+                  <div className="flex items-start justify-between gap-4 mb-6">
+                    <span className="grid size-12 place-items-center rounded-xl bg-(--brand-0) text-(--brand-9)">
+                      <Icon className="size-6" weight="bold" />
+                    </span>
+                    <Badge variant="tonal-static">{meta.label}</Badge>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-heading-4 font-extrabold tracking-tight leading-snug mb-4">
                     {s.title}
-                  </CardTitle>
-                  <Badge variant="tonal-static" className="shrink-0">
-                    {CATEGORY_LABEL[s.category] ?? s.category}
-                  </Badge>
-                </div>
-              </CardHeader>
+                  </h3>
 
-              <CardContent className="p-0 flex-1">
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {s.description}
-                </p>
-              </CardContent>
-
-              <CardFooter className="p-0 flex items-center justify-between pt-4 border-t border-border mt-auto">
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <TrophyIcon className="w-3.5 h-3.5" />
-                    +{s.xp_reward} XP
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Target className="w-3.5 h-3.5" />
-                    {s.difficulty}
-                  </span>
+                  {/* Meta row */}
+                  <div className="flex items-center gap-5 text-body-5 text-(--on-bg-low)">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Clock className="size-3.5" weight="bold" />
+                      {formatTimer(s.timer_seconds)}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <ShieldCheck className="size-3.5" weight="bold" />
+                      {DIFFICULTY_LABEL[s.difficulty] ?? s.difficulty}
+                    </span>
+                  </div>
                 </div>
-                <Button asChild size="sm" className="rounded-lg">
-                  <Link href={`/app/scenarios/${s.slug}/play`}>
-                    Начать
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

@@ -104,6 +104,7 @@ class ScenarioOut(BaseModel):
     difficulty: str = "medium"
     xp_reward: int = 100
     start_node_key: str
+    timer_seconds: Optional[int] = None
 
 
 class RunOut(BaseModel):

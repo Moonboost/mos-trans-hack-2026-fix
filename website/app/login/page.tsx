@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -24,6 +24,16 @@ const schema = z.object({
 export default function LoginPage() {
   const router = useRouter();
   const { setToken } = useUser();
+  const [redirectTo, setRedirectTo] = useState("/app/scenarios");
+
+  // Read ?from= once on mount. Only accept same-origin paths so a
+  // crafted link can't redirect the user off-site after login.
+  useEffect(() => {
+    const from = new URLSearchParams(window.location.search).get("from");
+    if (from && from.startsWith("/") && !from.startsWith("//")) {
+      setRedirectTo(from);
+    }
+  }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -76,7 +86,7 @@ export default function LoginPage() {
     safeCookieStorage.setItem("access_token", res.json.access_token);
     safeCookieStorage.setItem("refresh_token", res.json.refresh_token);
     setToken(res.json.access_token);
-    router.push("/app/scenarios");
+    router.push(redirectTo);
   }
 
   return (

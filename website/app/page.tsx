@@ -373,7 +373,7 @@ export default function HomePage() {
           {SCENARIOS.map((s) => {
             const Icon = s.icon;
             return (
-              <Link key={s.slug} href={`/app/scenarios/${s.slug}/play`}>
+              <Link key={s.slug} href={`/app/scenarios/${s.slug}`}>
                 <Card className="p-6 h-full bg-(--card) border border-(--outline) rounded-2xl ring-0 transition-all hover:border-(--brand-9) hover:-translate-y-0.5">
                   <div className="flex items-start justify-between mb-5">
                     <span className="grid size-11 place-items-center rounded-xl bg-(--brand-0) text-(--brand-9)">
@@ -451,9 +451,6 @@ export default function HomePage() {
           <h2 className="text-display-2 md:text-display-1 font-extrabold tracking-tight mb-6 max-w-3xl">
             Пройдите первый сценарий за две минуты
           </h2>
-          <p className="text-body-2 text-white/85 max-w-2xl mb-10 leading-relaxed">
-            Демо-доступ: test@example.com / Test12345!
-          </p>
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/login"

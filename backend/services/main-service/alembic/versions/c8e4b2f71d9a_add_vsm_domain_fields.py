@@ -3,6 +3,7 @@
 Revision ID: c8e4b2f71d9a
 Revises: b7f3a1d92c4e
 Create Date: 2026-09-25
+<<<<<<< HEAD
 
 LLM context: Grounds scenarios in STO RZD 03.011/03.013/03.014.
 - service_class: SLA per STO 03.011 p.10.5
@@ -10,6 +11,8 @@ LLM context: Grounds scenarios in STO RZD 03.011/03.013/03.014.
 - stage: boarding | in_flight | arrival (Приложение А СТО 03.011)
 - role_step on choice: admit | state_rule | offer_solution | reassure
 - requires_escalation: hard trigger to call Nachalnik poezda / PTB / LOVD
+=======
+>>>>>>> main
 """
 from typing import Sequence, Union
 from alembic import op
@@ -22,6 +25,7 @@ depends_on = None
 
 
 def upgrade() -> None:
+<<<<<<< HEAD
     # --- scenarios ---
     op.add_column('scenarios', sa.Column('service_class', sa.String(), server_default='any'))
     op.add_column('scenarios', sa.Column('passenger_type', sa.String(), server_default='regular'))
@@ -60,5 +64,26 @@ def downgrade() -> None:
     op.drop_index('ix_scenarios_service_class', 'scenarios')
     op.drop_column('scenarios', 'regulatory_ref')
     op.drop_column('scenarios', 'stage')
+=======
+    # --- scenarios: домен ВСМ ---
+    op.add_column('scenarios',
+        sa.Column('service_class', sa.String(), server_default='any', nullable=False))
+    op.add_column('scenarios',
+        sa.Column('passenger_type', sa.String(), server_default='adult', nullable=False))
+    op.add_column('scenarios',
+        sa.Column('regulatory_ref', sa.String(), nullable=True))
+
+    # --- node_choices: ролевая модель + эскалация ---
+    op.add_column('node_choices',
+        sa.Column('role_step', sa.String(), nullable=True))
+    op.add_column('node_choices',
+        sa.Column('requires_escalation', sa.Boolean(), server_default='false', nullable=False))
+
+
+def downgrade() -> None:
+    op.drop_column('node_choices', 'requires_escalation')
+    op.drop_column('node_choices', 'role_step')
+    op.drop_column('scenarios', 'regulatory_ref')
+>>>>>>> main
     op.drop_column('scenarios', 'passenger_type')
     op.drop_column('scenarios', 'service_class')

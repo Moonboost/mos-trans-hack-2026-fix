@@ -4,6 +4,8 @@ services:
       context: ./services/main-service
       dockerfile: Dockerfile
     container_name: main-service
+    ports:
+      - "8000:8000"
     dns:
       - 8.8.8.8
       - 1.1.1.1

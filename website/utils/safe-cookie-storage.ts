@@ -1,6 +1,8 @@
 import Cookies from 'js-cookie';
 
-const COOKIE_DOMAIN = "." + process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost"
+const ROOT = process.env.NEXT_PUBLIC_ROOT_DOMAIN;
+// No env -> no domain attribute (cookie binds to exact host, works on IP too)
+const COOKIE_DOMAIN = ROOT && ROOT !== "localhost" ? "." + ROOT : undefined;
 
 export const safeCookieStorage = {
     getItem: (key: string): string | null => {
@@ -16,7 +18,7 @@ export const safeCookieStorage = {
         try {
             Cookies.set(key, String(value), {
                 expires: expiresDays,
-                domain: COOKIE_DOMAIN,
+                ...(COOKIE_DOMAIN ? { domain: COOKIE_DOMAIN } : {}),
                 path: '/',
                 sameSite: 'Lax'
             })
@@ -25,7 +27,7 @@ export const safeCookieStorage = {
     removeItem: (key: string): void => {
         if (typeof window === "undefined") return
         try {
-            Cookies.remove(key, { domain: COOKIE_DOMAIN, path: '/' })
+            Cookies.remove(key, { ...(COOKIE_DOMAIN ? { domain: COOKIE_DOMAIN } : {}), path: '/' })
         } catch {}
     }
 }

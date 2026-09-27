@@ -80,7 +80,7 @@ export default function LoginPage() {
     safeCookieStorage.setItem("refresh_token", res.json.refresh_token);
     setToken(res.json.access_token);
     toast.success("Welcome!");
-    router.push("/");
+    router.push("/app/scenarios");
   }
 
   return (

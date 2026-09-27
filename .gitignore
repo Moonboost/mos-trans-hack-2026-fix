@@ -39,3 +39,9 @@ letsencrypt/
 
 .idea
 .vscode
+# demo packaging
+.env
+node_modules/
+.next/
+__pycache__/
+*.pyc

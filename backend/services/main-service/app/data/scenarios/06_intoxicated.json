@@ -32,6 +32,7 @@
         {"label": "Уйти в служебную зону — пусть разбираются без меня", "next_node_key": "end_mid", "loyalty_delta": -10, "safety_delta": -5, "score_delta": -5, "competence": "safety_escalation", "role_step": null, "order_index": 1}
       ]
     },
+<<<<<<< HEAD
     {
       "key": "end_ok",
       "type": "end",
@@ -53,5 +54,10 @@
       "is_terminal": true,
       "choices": []
     }
+=======
+    {"key": "end_ok", "type": "end", "text": "Пассажир сопровождается сотрудниками ПТБ на выход. Обстановка стабилизирована.", "is_terminal": true, "choices": []},
+    {"key": "end_mid", "type": "end", "text": "Разобрались без вас. Внутренний отзыв: недостаточное участие в разрешении ситуации.", "is_terminal": true, "choices": []},
+    {"key": "end_fail", "type": "end", "text": "Конфликт перешёл в физическую стадию. Серьёзный инцидент, разбор с руководством.", "is_terminal": true, "choices": []}
+>>>>>>> main
   ]
 }

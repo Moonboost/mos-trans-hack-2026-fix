@@ -6,7 +6,11 @@
   "service_class": "any",
   "passenger_type": "allergic",
   "stage": "in_flight",
+<<<<<<< HEAD
   "regulatory_ref": "СТО РЖД 03.011-2026, п. 7.8; СТО РЖД 03.014-2026",
+=======
+  "regulatory_ref": "СТО РЖД 03.011-2026, п. 7.8",
+>>>>>>> main
   "difficulty": "medium",
   "xp_reward": 150,
   "start_node_key": "start",
@@ -31,6 +35,7 @@
         {"label": "Пересадить, но без объяснений", "next_node_key": "end_mid", "loyalty_delta": 5, "safety_delta": 5, "score_delta": 10, "competence": "medical_response", "role_step": "offer_solution", "order_index": 1}
       ]
     },
+<<<<<<< HEAD
     {
       "key": "end_ok",
       "type": "end",
@@ -52,5 +57,10 @@
       "is_terminal": true,
       "choices": []
     }
+=======
+    {"key": "end_ok", "type": "end", "text": "Пассажирка благодарит, взяла контакт информационной стойки на будущее.", "is_terminal": true, "choices": []},
+    {"key": "end_mid", "type": "end", "text": "Формально помогли, но без понимания на будущее.", "is_terminal": true, "choices": []},
+    {"key": "end_bad", "type": "end", "text": "Жалоба: «проигнорировали медицинскую ситуацию».", "is_terminal": true, "choices": []}
+>>>>>>> main
   ]
 }

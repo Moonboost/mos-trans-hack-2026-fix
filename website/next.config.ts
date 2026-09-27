@@ -1,13 +1,15 @@
 import type { NextConfig } from "next";
 
+const BACKEND = process.env.API_URL || "http://localhost:8000";
+
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  allowedDevOrigins: ["192.168.75.101"],
+  reactStrictMode: true,
   async rewrites() {
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
     return [
       {
-        source: '/api/:path*',
-        destination: `${apiBase}/api/:path*`,
+        source: "/api/:path*",
+        destination: `${BACKEND}/api/:path*`,
       },
     ];
   },

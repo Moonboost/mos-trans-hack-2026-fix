@@ -6,7 +6,11 @@
   "service_class": "any",
   "passenger_type": "regular",
   "stage": "in_flight",
+<<<<<<< HEAD
   "regulatory_ref": "СТО РЖД 03.011-2026, прил. А; СТО РЖД 03.009",
+=======
+  "regulatory_ref": "СТО РЖД 03.011-2026",
+>>>>>>> main
   "difficulty": "easy",
   "xp_reward": 100,
   "start_node_key": "start",
@@ -32,6 +36,7 @@
         {"label": "«Я приглашу начальника поезда для разъяснения»", "next_node_key": "end_mid", "loyalty_delta": -5, "safety_delta": 0, "score_delta": 0, "competence": "safety_escalation", "requires_escalation": "nachalnik_poezda", "role_step": "offer_solution", "order_index": 1}
       ]
     },
+<<<<<<< HEAD
     {
       "key": "end_ok",
       "type": "end",
@@ -53,5 +58,10 @@
       "is_terminal": true,
       "choices": []
     }
+=======
+    {"key": "end_ok", "type": "end", "text": "Пассажир надел наушники. Сосед благодарно кивнул. Инцидент исчерпан.", "is_terminal": true, "choices": []},
+    {"key": "end_mid", "type": "end", "text": "Начальник поезда подошёл. Инцидент улажен, но вы потратили ресурс бригады на простую ситуацию.", "is_terminal": true, "choices": []},
+    {"key": "end_bad", "type": "end", "text": "Видео с «равнодушным проводником» попало в соцсети. Жалоба через приложение.", "is_terminal": true, "choices": []}
+>>>>>>> main
   ]
 }

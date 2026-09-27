@@ -1,24 +1,14 @@
-# E-shop template
+# Геймификация для ВСМ — тренажёр проводника
 
-Fully functional ready-to-use, AI-optimized e-shop template with backend and frontend
+Интерактивный обучающий тренажёр для проводников ВСМ-400: нелинейные диалоговые
+сценарии по СТО РЖД 03.011/03.013/03.014 и «Ситуациям на борту», две шкалы
+(лояльность пассажира / рейтинг безопасности), таймерные штрафы, XP, уровни,
+достижения и таблица лидеров.
 
-## Files structure
+## Быстрый старт
 
-```text
-/
-├── server/
-│   ├── ...
-│   ├── env.example (.env vars especially for this repo)
-│   ├── Dockerfile (Dockerfile for service)
-│   └── docker-compose (separated logic if you want to make microservices)
-├── @/
-│   ├── ...
-│   ├── env.example (.env vars especially for this repo)
-│   ├── Dockerfile (Dockerfile for service)
-│   └── docker-compose (separated logic if you want to make microservices)
-├── env.example (common .env vars)
-├── .gitignore
-├── .repomixignore
-├── docker-compose
-└── README.md
-```
+```bash
+cp .env.example .env                 # секреты заменить на свои
+./scripts/launch.sh                  # бэкенд + миграции + сиды
+./scripts/launch.sh --web            # то же + фронтенд в Docker (порт 3000)
+./scripts/smoke_test.sh              # e2e-проверка API

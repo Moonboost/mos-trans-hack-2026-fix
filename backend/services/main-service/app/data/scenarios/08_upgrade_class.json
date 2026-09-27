@@ -6,7 +6,11 @@
   "service_class": "business",
   "passenger_type": "regular",
   "stage": "in_flight",
+<<<<<<< HEAD
   "regulatory_ref": "СТО РЖД 03.011-2026, п. 7.1.3, п. 5.3",
+=======
+  "regulatory_ref": "СТО РЖД 03.011-2026, п. 7.1.3",
+>>>>>>> main
   "difficulty": "medium",
   "xp_reward": 150,
   "start_node_key": "start",
@@ -32,6 +36,7 @@
         {"label": "«Оформление невозможно, обратитесь в контактный центр»", "next_node_key": "end_mid", "loyalty_delta": -10, "safety_delta": 0, "score_delta": -5, "competence": "service_class_knowledge", "role_step": null, "order_index": 1}
       ]
     },
+<<<<<<< HEAD
     {
       "key": "end_ok",
       "type": "end",
@@ -60,5 +65,11 @@
       "is_terminal": true,
       "choices": []
     }
+=======
+    {"key": "end_ok", "type": "end", "text": "Пассажир доволен, апгрейд оформлен по правилам.", "is_terminal": true, "choices": []},
+    {"key": "end_mid", "type": "end", "text": "Формально верно, но клиент ушёл с ощущением «вам всё равно».", "is_terminal": true, "choices": []},
+    {"key": "end_fail", "type": "end", "text": "Нарушение порядка оплаты. Разбор с руководством бригады.", "is_terminal": true, "choices": []},
+    {"key": "end_bad", "type": "end", "text": "Жалоба: «проводник не проверил наличие мест».", "is_terminal": true, "choices": []}
+>>>>>>> main
   ]
 }

@@ -20,7 +20,11 @@ export async function $fetch(
 ): Promise<FetchResult> {
   headers.Accept = "application/json"
   const token = safeCookieStorage.getItem("access_token")
-  const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
+  // Browser: relative URL (Next rewrites proxy it).
+  // Server (SSR): absolute URL, backend is reachable on VM localhost.
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    (typeof window === "undefined" ? "http://localhost:8000" : "")
   const url = API_URL + route
 
   if (token) {
@@ -30,7 +34,8 @@ export async function $fetch(
   const response = await fetch(url, {
     method,
     body,
-    headers
+    headers,
+    cache: "no-store",
   })
 
   let json

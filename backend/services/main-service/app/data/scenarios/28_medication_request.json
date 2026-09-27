@@ -6,7 +6,11 @@
   "service_class": "any",
   "passenger_type": "regular",
   "stage": "in_flight",
+<<<<<<< HEAD
   "regulatory_ref": "СТО РЖД 03.011-2026, разд. 10.4; СТО РЖД 03.014-2026, п. 8.9",
+=======
+  "regulatory_ref": "СТО РЖД 03.011-2026, разд. 10.4",
+>>>>>>> main
   "difficulty": "hard",
   "xp_reward": 200,
   "start_node_key": "start",
@@ -32,6 +36,7 @@
         {"label": "Вызвать скорую на ближайшей станции по решению начальника поезда", "next_node_key": "end_ok", "loyalty_delta": 10, "safety_delta": 15, "score_delta": 25, "competence": "medical_response", "role_step": "offer_solution", "order_index": 1}
       ]
     },
+<<<<<<< HEAD
     {
       "key": "end_ok",
       "type": "end",
@@ -53,5 +58,10 @@
       "is_terminal": true,
       "choices": []
     }
+=======
+    {"key": "end_ok", "type": "end", "text": "Пассажиру оказана помощь. Ситуация под контролем. Благодарность в адрес бригады.", "is_terminal": true, "choices": []},
+    {"key": "end_fail", "type": "end", "text": "Пассажиру стало хуже. Аллергическая реакция на препарат. Разбирательство с юридическими последствиями для бригады.", "is_terminal": true, "choices": []},
+    {"key": "end_bad", "type": "end", "text": "Пассажир написал жалобу. Репутационный ущерб.", "is_terminal": true, "choices": []}
+>>>>>>> main
   ]
 }

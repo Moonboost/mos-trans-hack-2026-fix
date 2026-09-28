@@ -83,9 +83,9 @@ class ScenarioOutAdmin(BaseModel):
     title: str
     description: Optional[str] = None
     category: str
-    service_class: Optional[str] = "any"           # <-- PATCHED: Optional
-    passenger_type: Optional[str] = "regular"      # <-- PATCHED: Optional
-    regulatory_ref: Optional[str] = None           # <-- PATCHED: Optional
+    service_class: Optional[str] = "any"
+    passenger_type: Optional[str] = "regular"
+    regulatory_ref: Optional[str] = None
     difficulty: str
     xp_reward: int
     start_node_key: str

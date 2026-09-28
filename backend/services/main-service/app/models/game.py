@@ -20,6 +20,7 @@ class RunStatus(str, enum.Enum):
     in_progress = "in_progress"
     finished = "finished"
     abandoned = "abandoned"
+    failed = "failed"
 
 
 class Scenario(Base):
@@ -67,6 +68,8 @@ class NodeChoice(Base):
     competence = Column(String, nullable=True)
     feedback = Column(Text, nullable=True)
     order_index = Column(Integer, default=0)
+    role_step = Column(String, nullable=True)
+    requires_escalation = Column(Boolean, default=False)
 
 
 class UserGameProfile(Base):
@@ -94,6 +97,10 @@ class ScenarioRun(Base):
     choices_log = Column(JSON, default=list)
     started_at = Column(DateTime, default=datetime.utcnow)
     finished_at = Column(DateTime, nullable=True)
+    service_class = Column(String, default="standard")
+    role_steps_seen = Column(JSON, default=list)
+    escalation_done = Column(Boolean, default=False)
+    escalation_deadline_at = Column(DateTime, nullable=True)
 
 
 class Achievement(Base):
@@ -134,17 +141,6 @@ from sqlalchemy.dialects.postgresql import UUID
 from database.database import Base
 
 
-class ScenarioStatus(str, enum.Enum):
-    draft = "draft"
-    active = "active"
-    archived = "archived"
-
-
-class RunStatus(str, enum.Enum):
-    in_progress = "in_progress"
-    finished = "finished"
-    abandoned = "abandoned"
-    failed = "failed"
 
 
 class ServiceClass(str, enum.Enum):

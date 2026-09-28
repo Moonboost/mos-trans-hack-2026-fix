@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { $fetch } from "@/utils/fetch";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { User, Mail, Save, X, Pencil } from "@phosphor-icons/react";
+import { User, EnvelopeIcon, FloppyDiskIcon, X, Pencil } from "@phosphor-icons/react";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -113,7 +113,7 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                  <Mail className="h-4 w-4" />
+                  <EnvelopeIcon className="h-4 w-4" />
                   Email
                 </div>
                 <p className="text-lg font-medium text-foreground break-all">
@@ -159,7 +159,7 @@ export default function ProfilePage() {
                   <>Сохранение...</>
                 ) : (
                   <>
-                    <Save className="h-4 w-4" />
+                    <FloppyDiskIcon className="h-4 w-4" />
                     Сохранить изменения
                   </>
                 )}

@@ -49,8 +49,8 @@ test@example.com / Test12345!
 Start the backend stack:
 
 ```bash
-cp .env.example .env
-docker compose --profile dev up -d --build
+cp .env backend/.env
+docker compose -f backend/docker-compose.yml --profile dev up -d --build
 ```
 
 Then run the frontend from the host:

@@ -154,6 +154,29 @@ With the stack up:
 It logs in as the demo user, lists scenarios, starts a run, makes a choice
 and fetches the report — a quick end-to-end sanity check of the API.
 
+## Full stack test
+
+`scripts/full_test.sh` checks backend and frontend together. Unlike
+`smoke_test.sh`, which only checks the API, this script also starts the
+frontend (if it is not already running on port 3001), opens the main
+pages, and checks `/app/profile` for runtime errors in the HTML.
+
+Run:
+
+```bash
+./scripts/full_test.sh
+```
+
+Steps:
+
+1. Backend — login, scenario list, full game loop (start a run, choose, report).
+2. Frontend — starts `pnpm dev` on port 3001 if the server is not already running.
+3. Checks `/login`, `/`, `/app/scenarios`, `/app/profile`, `/app/leaderboard` by response code.
+4. Checks `/app/profile` for runtime errors in the HTML.
+
+On success the script prints `PASS`/`✓` for each step and a final
+`All tests passed!` line.
+
 ## Data and compliance
 
 - No real PII. Scenarios, passenger names and dialogue are synthetic.

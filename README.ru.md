@@ -21,7 +21,7 @@
 
 ```bash
 cp .env.example .env
-docker compose -f backend/docker-compose.yml --profile dev up -d --build
+docker compose --profile prod up -d --build
 ```
 
 Всё. При каждом старте контейнера `main-service` автоматически:
